@@ -146,19 +146,30 @@ learnjs.problemView = function(data) {
   var resultFlash = view.find('.result');
   var answer = view.find('.answer');
 
-  function checkAnswer() {
+  function checkAnswer(){
+    var def = $.Deferred();
     var test = problemData.code.replace('__', answer.val()) + '; problem();';
-    return eval(test);
+    var worker = new Worker('worker.js');
+    worker.onmessage = function(e){
+      if(e.data){
+        def.resolve(e.data)
+      } else {
+        def.reject();
+      }
+    }
+    worker.postMessage(test);
+    // return eval(test);
+    return def;
   }
 
-  function checkAnswerClick() {
-    if (checkAnswer()) {
+  function checkAnswerClick(){
+    checkAnswer().done(function(){
       var flashContent = learnjs.buildCorrectFlash(problemNumber);
       learnjs.flashElement(resultFlash, flashContent);
-      learnjs.saveAnswer(problemNumber, answer.val());
-    } else {
-      learnjs.flashElement(resultFlash, 'Incorrect!');
-    }
+      learnjs.saveAnswer(problemNumber, answer.val());  
+    }).fail(function(){
+      learnjs.flashElement(resultFlash, 'Incorrect!')
+    })
     return false;
   }
 
