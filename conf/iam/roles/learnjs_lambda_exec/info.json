@@ -13,8 +13,8 @@
                 }
             ]
         },
-        "RoleId": "AROAJ67KFEW5PCLEK3X2S",
-        "CreateDate": "2015-12-17T18:27:47.499Z",
+        "RoleId": "AROA3WXJKGH4ASXRVONS6",
+        "CreateDate": "2019-08-29T01:00:43Z",
         "RoleName": "learnjs_lambda_exec",
         "Path": "/",
         "Arn": "arn:aws:iam::804721930744:role/learnjs_lambda_exec"

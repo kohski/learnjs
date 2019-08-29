@@ -43,6 +43,19 @@ learnjs.sendDbRequest = function(req, retry) {
   return promise;
 }
 
+learnjs.popularAnswers = function(problemId){
+  return learnjs.identity.then(function(){
+    var lambda = new AWS.Lambda()
+    var params = {
+      FunctionName: 'learnjs_popularAnswers',
+      Payload: JSON.stringify({ problemNumber: problemId })
+    }
+    return learnjs.sendAwsRequest(lambda.invoke(params), function(){
+      return learnjs.popularAnswers(problemId)
+    })
+  })
+}
+
 learnjs.fetchAnswer = function(problemId) {
   return learnjs.identity.then(function(identity) {
     var db = new AWS.DynamoDB.DocumentClient();
